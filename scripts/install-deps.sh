@@ -45,6 +45,6 @@ echo "다음 순서로 진행하세요:"
 echo "1) ./scripts/install-deps.sh 실행"
 echo "2) 계속 실패하면 IT팀에 registry.npmjs.org, registry.npmmirror.com 허용 요청"
 echo "3) 사내 레지스트리 URL을 받으면 npm config set registry ... 적용"
-echo "   npm config set registry https://<company-registry>/"
+echo "   npm config set registry https://YOUR_COMPANY_REGISTRY/"
 echo "   npm install"
 exit 1
