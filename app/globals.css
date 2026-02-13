@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Pretendard", system-ui, -apple-system, sans-serif;
+  background: #f4f6fa;
+  color: #111827;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl bg-white p-5 shadow-sm;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+  }
+}
