@@ -41,11 +41,10 @@ for registry in "${REGISTRIES[@]}"; do
 done
 
 echo "❌ npm install failed with all known registries."
-echo "가능한 다음 조치를 해주세요:"
-echo "1) 프록시 없이 외부망 접속 가능한 네트워크에서 재시도"
-echo "2) IT팀에 아래 도메인 allowlist 요청"
-echo "   - registry.npmjs.org"
-echo "   - registry.npmmirror.com"
-echo "3) 당장 주소를 모르면, 사내 npm 레지스트리 URL을 IT팀에 문의"
-echo "4) URL을 받으면: npm config set registry https://<company-registry>/"
+echo "다음 순서로 진행하세요:"
+echo "1) ./scripts/install-deps.sh 실행"
+echo "2) 계속 실패하면 IT팀에 registry.npmjs.org, registry.npmmirror.com 허용 요청"
+echo "3) 사내 레지스트리 URL을 받으면 npm config set registry ... 적용"
+echo "   npm config set registry https://<company-registry>/"
+echo "   npm install"
 exit 1

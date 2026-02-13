@@ -19,17 +19,11 @@ npm run dev
 
 브라우저에서 `http://localhost:3000` 접속.
 
-## 사내 레지스트리 주소가 없을 때
-
-괜찮습니다. 먼저 아래 순서로 진행하세요.
+## 설치 문제 대응 (요청하신 순서)
 
 1. `./scripts/install-deps.sh` 실행
-   - 공용 npm 레지스트리(`registry.npmjs.org`) 시도
-   - 공용 미러(`registry.npmmirror.com`)도 자동 시도
-   - 각각 프록시 OFF/ON 둘 다 시도
-2. 그래도 실패하면 네트워크 정책 이슈입니다.
-   - IT팀에 `registry.npmjs.org`, `registry.npmmirror.com` allowlist 요청
-3. 추후 사내 레지스트리 URL을 받으면 아래처럼 설정
+2. 계속 실패하면 IT팀에 `registry.npmjs.org`, `registry.npmmirror.com` 허용 요청
+3. 사내 레지스트리 URL을 받으면 `npm config set registry ...` 적용
 
 ```bash
 npm config set registry https://<company-registry>/
