@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogLift Preview</title>
+    <style>
+      body { margin:0; font-family: Inter, Pretendard, system-ui, sans-serif; background:#f4f6fa; color:#111827; }
+      .wrap { max-width:980px; margin:0 auto; padding:16px; display:flex; gap:16px; }
+      .card { border-radius:16px; background:#fff; padding:20px; box-shadow:0 2px 8px rgba(15,23,42,.06); }
+      .sidebar { width:240px; background:#0f172a; color:#fff; border-radius:16px; padding:20px; }
+      .sidebar button { width:100%; margin-top:8px; background:#1e293b; border:0; color:#fff; border-radius:8px; padding:10px; text-align:left; }
+      .main { flex:1; display:flex; flex-direction:column; gap:16px; }
+      .roles { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+      .roles button { border-radius:999px; border:1px solid #cbd5e1; padding:8px 14px; background:#fff; cursor:pointer; }
+      .roles button.active { background:#0f172a; border-color:#0f172a; color:#fff; }
+      .badge { display:inline-flex; background:#dcfce7; color:#15803d; border-radius:999px; padding:4px 10px; font-size:12px; font-weight:600; }
+      .actions { display:grid; gap:8px; grid-template-columns:repeat(3,1fr); margin-top:12px; }
+      .action { background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:10px; font-size:14px; }
+      .grid3 { display:grid; gap:12px; grid-template-columns:repeat(3,1fr); }
+      .rec { margin-top:12px; border:1px solid #bfdbfe; background:#eff6ff; color:#1e40af; border-radius:10px; padding:10px; font-weight:700; }
+      .mobile { position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid #e2e8f0; padding:8px; display:none; }
+      .mobile div { display:grid; grid-template-columns:repeat(4,1fr); text-align:center; font-size:12px; color:#475569; }
+      @media (max-width: 900px){ .wrap{display:block; padding-bottom:70px;} .sidebar{display:none;} .mobile{display:block;} .actions,.grid3{grid-template-columns:1fr;} }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <aside class="sidebar">
+        <div style="font-size:12px;color:#94a3b8;letter-spacing:.08em;">LOGLIFT</div>
+        <h3 id="menuRole" style="margin:8px 0 0;">COACH 메뉴</h3>
+        <button>대시보드</button><button>회원 관리</button><button>프로그램</button><button>리포트</button>
+      </aside>
+      <main class="main">
+        <section class="card">
+          <div style="font-size:12px;color:#64748b;letter-spacing:.08em;">LogLift</div>
+          <h1 style="margin:8px 0;">피트니스 센터 회원관리 시스템 (실행 미리보기)</h1>
+          <p style="margin:0;color:#475569;">역할 전환, 적응형 네비게이션, 자동 강도 조절을 브라우저에서 바로 확인할 수 있습니다.</p>
+          <div class="roles" id="roleButtons"></div>
+        </section>
+        <section class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <h3 id="roleTitle" style="margin:0;">코치 대시보드</h3>
+            <span class="badge">역할 기반 접근 제어 활성화</span>
+          </div>
+          <p id="roleSummary" style="color:#475569;"></p>
+          <div class="actions" id="roleActions"></div>
+        </section>
+        <section class="card">
+          <h3 style="margin-top:0;">컨디션 기반 자동 강도 조절</h3>
+          <div class="grid3">
+            <label>수면 점수: <span id="sleepVal">7</span><input id="sleep" type="range" min="1" max="10" value="7" /></label>
+            <label>피로 점수: <span id="fatigueVal">4</span><input id="fatigue" type="range" min="1" max="10" value="4" /></label>
+            <label>통증 점수: <span id="painVal">2</span><input id="pain" type="range" min="1" max="10" value="2" /></label>
+          </div>
+          <div class="rec" id="recommendation">오늘 추천: 기본 강도 유지</div>
+        </section>
+      </main>
+    </div>
+    <div class="mobile"><div><span>대시보드</span><span>회원</span><span>운동</span><span>설정</span></div></div>
+
+    <script>
+      const roles = {
+        owner: { label:'오너', summary:'센터 KPI와 운영 상태를 확인합니다.', actions:['센터 KPI 확인','운영 정책 관리','프리미엄 현황 확인'] },
+        admin: { label:'운영자', summary:'여러 센터 회원/코치 데이터를 통합 관리합니다.', actions:['회원 상태 점검','코치 배정/변경','센터별 필터'] },
+        coach: { label:'코치', summary:'회원 프로그램/주간 요약/메모를 관리합니다.', actions:['프로그램 템플릿 작성','회원별 주간 요약','통증/주의 메모'] },
+        member: { label:'회원', summary:'운동/식단 기록과 자동 강도 조절을 사용합니다.', actions:['오늘 운동 기록','식단 기록','AI 프로그램 추천'] },
+      };
+      let role = 'coach';
+
+      function calc(sleep, fatigue, pain){
+        const strain = fatigue + pain;
+        if (sleep <= 3 || strain >= 15) return '강도 -20% / 세트 -1';
+        if (sleep <= 5 || strain >= 10) return '강도 -10% / 세트 유지';
+        if (sleep >= 8 && strain <= 5) return '강도 +5% / 세트 +1';
+        return '기본 강도 유지';
+      }
+
+      function renderRole(){
+        const r = roles[role];
+        document.getElementById('menuRole').textContent = role.toUpperCase() + ' 메뉴';
+        document.getElementById('roleTitle').textContent = r.label + ' 대시보드';
+        document.getElementById('roleSummary').textContent = r.summary;
+        document.getElementById('roleActions').innerHTML = r.actions.map(a => `<div class="action">${a}</div>`).join('');
+        [...document.querySelectorAll('.roles button')].forEach(btn => btn.classList.toggle('active', btn.dataset.role===role));
+      }
+
+      const roleButtons = document.getElementById('roleButtons');
+      Object.keys(roles).forEach(k=>{
+        const b=document.createElement('button'); b.textContent=roles[k].label; b.dataset.role=k;
+        b.onclick=()=>{ role=k; renderRole(); };
+        roleButtons.appendChild(b);
+      });
+
+      function updateRec(){
+        const sleep = +document.getElementById('sleep').value;
+        const fatigue = +document.getElementById('fatigue').value;
+        const pain = +document.getElementById('pain').value;
+        document.getElementById('sleepVal').textContent = sleep;
+        document.getElementById('fatigueVal').textContent = fatigue;
+        document.getElementById('painVal').textContent = pain;
+        document.getElementById('recommendation').textContent = '오늘 추천: ' + calc(sleep, fatigue, pain);
+      }
+      ['sleep','fatigue','pain'].forEach(id => document.getElementById(id).addEventListener('input', updateRec));
+      renderRole(); updateRec();
+    </script>
+  </body>
+</html>
