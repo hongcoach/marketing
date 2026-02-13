@@ -26,11 +26,11 @@ npm run dev
 3. 사내 레지스트리 URL을 받으면 `npm config set registry ...` 적용
 
 ```bash
-npm config set registry https://YOUR_COMPANY_REGISTRY/
+npm config set registry https://loglift/
 npm install
 ```
 
-`YOUR_COMPANY_REGISTRY` 부분을 실제 주소로 바꿔서 실행하세요.
+`loglift` 사내 레지스트리 주소를 사용해 실행하세요.
 
 ## 기술 스택
 
