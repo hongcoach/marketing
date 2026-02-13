@@ -19,18 +19,20 @@ npm run dev
 
 브라우저에서 `http://localhost:3000` 접속.
 
-## npm install 실패(403) 시 빠른 해결
+## 사내 레지스트리 주소가 없을 때
 
-이 환경은 프록시 정책 때문에 `npm install`이 막힐 수 있습니다.
-`./scripts/install-deps.sh`는 아래 순서로 자동 시도합니다.
+괜찮습니다. 먼저 아래 순서로 진행하세요.
 
-1. 프록시 비활성화 후 `registry.npmjs.org` 직접 설치
-2. 실패 시 현재 프록시 설정으로 재시도
-
-둘 다 실패하면 네트워크 정책/사내 레지스트리 설정이 필요합니다.
+1. `./scripts/install-deps.sh` 실행
+   - 공용 npm 레지스트리(`registry.npmjs.org`) 시도
+   - 공용 미러(`registry.npmmirror.com`)도 자동 시도
+   - 각각 프록시 OFF/ON 둘 다 시도
+2. 그래도 실패하면 네트워크 정책 이슈입니다.
+   - IT팀에 `registry.npmjs.org`, `registry.npmmirror.com` allowlist 요청
+3. 추후 사내 레지스트리 URL을 받으면 아래처럼 설정
 
 ```bash
-npm config set registry https://<your-company-registry>/
+npm config set registry https://<company-registry>/
 npm install
 ```
 
