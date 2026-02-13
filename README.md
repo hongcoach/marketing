@@ -27,6 +27,30 @@ npm run dev
 
 브라우저에서 `http://localhost:4173` 접속.
 
+## 직접 사용해보기
+
+### A) 바로 체험(권장, npm 설치 불필요)
+
+```bash
+./scripts/preview.sh
+```
+
+- 브라우저: `http://localhost:4173`
+- 가능한 동작
+  - 역할 버튼 전환(owner/admin/coach/member)
+  - 수면/피로/통증 슬라이더 조절
+  - 추천 강도 문구 실시간 변경
+
+### B) Next.js 개발 모드로 사용
+
+```bash
+./scripts/install-deps.sh
+npm run dev
+```
+
+- 브라우저: `http://localhost:3000`
+- 설치 실패 시: 아래 "설치 문제 대응" 순서대로 진행
+
 ## 설치 문제 대응 (요청하신 순서)
 
 1. `./scripts/install-deps.sh` 실행
