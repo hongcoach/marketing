@@ -13,11 +13,26 @@ LogLift는 피트니스 센터를 위한 회원관리 시스템 프로토타입 
 ## 실행 방법
 
 ```bash
-npm install
+./scripts/install-deps.sh
 npm run dev
 ```
 
 브라우저에서 `http://localhost:3000` 접속.
+
+## npm install 실패(403) 시 빠른 해결
+
+이 환경은 프록시 정책 때문에 `npm install`이 막힐 수 있습니다.
+`./scripts/install-deps.sh`는 아래 순서로 자동 시도합니다.
+
+1. 프록시 비활성화 후 `registry.npmjs.org` 직접 설치
+2. 실패 시 현재 프록시 설정으로 재시도
+
+둘 다 실패하면 네트워크 정책/사내 레지스트리 설정이 필요합니다.
+
+```bash
+npm config set registry https://<your-company-registry>/
+npm install
+```
 
 ## 기술 스택
 
