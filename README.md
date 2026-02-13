@@ -19,6 +19,14 @@ npm run dev
 
 브라우저에서 `http://localhost:3000` 접속.
 
+## 운영 화면 빠르게 보기 (npm 설치 없이)
+
+```bash
+./scripts/preview.sh
+```
+
+브라우저에서 `http://localhost:4173` 접속.
+
 ## 설치 문제 대응 (요청하신 순서)
 
 1. `./scripts/install-deps.sh` 실행
